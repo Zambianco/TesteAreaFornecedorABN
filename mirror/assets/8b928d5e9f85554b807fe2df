@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/mirror-assets/aab63435a01a8dd21eeb7818.ttf") format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/mirror-assets/0dfc29fde7d95ca65fe2a51c.ttf") format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/mirror-assets/56632cca6632f379925bba83.ttf") format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/mirror-assets/d03f1389be8c7cea7e4f4546.ttf") format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/mirror-assets/aaf352f017a5007bcd6888e3.ttf") format('truetype');
+}

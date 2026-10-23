@@ -1,0 +1,15 @@
+from django.shortcuts import redirect
+from django.urls import reverse
+
+
+class ForcePasswordChangeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.user.is_authenticated and not request.user.is_staff:
+            supplier = getattr(request.user, 'supplier', None)
+            allowed = {reverse('force_password_change'), reverse('logout')}
+            if supplier and supplier.must_change_password and request.path not in allowed:
+                return redirect('force_password_change')
+        return self.get_response(request)

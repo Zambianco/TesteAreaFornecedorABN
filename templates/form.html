@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if upload %}<p>As colunas devem ser <code>cnpj,razaosocial,nota</code>. Fornecedores novos são cadastrados automaticamente e a avaliação é vinculada ao ano atual.</p>{% elif title == 'Área do fornecedor' %}<p class="intro">Entre com o CNPJ da empresa e a senha cadastrada.</p>{% elif title == 'Recuperar senha' %}<p class="intro">Informe o CNPJ da empresa. Quando o envio estiver habilitado, a recuperação será encaminhada ao e-mail cadastrado.</p>{% endif %}
+<form method="post" {% if upload %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}{{ form.as_p }}<button type="submit">{% if upload %}Importar CSV{% else %}Confirmar{% endif %}</button></form>{% if title == 'Área do fornecedor' %}<p class="form-link"><a href="{% url 'password_reset' %}">Esqueci minha senha</a></p>{% endif %}{% endblock %}

@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block content %}{% if supplier %}<div class="supplier-welcome"><span>Bem-vindo à sua área,</span><strong>{{ supplier.name }}</strong><p>Consulte abaixo as avaliações exclusivas da sua empresa.</p></div>{% else %}<p>Consulte suas notas por exercício.</p>{% endif %}
+{% if user.is_superuser %}<div class="admin-actions"><a class="button" href="{% url 'admin:suppliers_evaluation_import' %}">Enviar resultados (CSV)</a><a href="/admin/">Gerenciar fornecedores</a></div>{% endif %}
+<table><thead><tr><th>Exercício</th><th>Nota</th></tr></thead><tbody>{% for evaluation in evaluations %}<tr><td>{{ evaluation.year }}</td><td>{% if evaluation.score is None %}Sem nota{% else %}{{ evaluation.score }}{% endif %}</td></tr>{% empty %}<tr><td colspan="2">Nenhuma avaliação disponível.</td></tr>{% endfor %}</tbody></table>{% endblock %}

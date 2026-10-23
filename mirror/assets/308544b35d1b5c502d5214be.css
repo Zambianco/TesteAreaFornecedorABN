@@ -1,0 +1,202 @@
+.quality{
+    position: relative;
+    padding: 85px 0 66px;
+}
+
+.quality .row{
+    grid-gap: 2rem 0;
+}
+
+.quality .dbtn{
+    color: var(--white);
+    background-color: var(--footer1);
+    margin-top: 2rem;
+}
+
+.quality .dbtn::after{
+    filter: brightness(0) invert(1);
+    -webkit-filter: brightness(0) invert(1);
+    -ms-filter: brightness(0) invert(1);
+}
+
+.quality .img{
+    position: absolute;
+    inset: 0 0 auto auto;
+    width: 56.92708vw;
+    height: 100%;
+    clip-path: polygon(28.45379% 0,100% 0,100% 100%,0 100%);
+    -webkit-clip-path: polygon(28.45379% 0,100% 0,100% 100%,0 100%);
+}
+
+@media(max-width:1200px){
+	.quality .img{
+		width: 52.92708vw;
+	}
+}
+
+.quality .img::before{
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: url("/mirror-assets/8f4baeb6daacf013cd8406c9.png") no-repeat bottom center/100% auto;
+}
+
+.quality .img .tri{
+    position: absolute;
+    inset: auto auto 0 0;
+    width: clamp(1px,37.60292%,411px);
+    height: 65.71009%;
+}
+
+.quality .img .tri::before,
+.quality .img .tri::after{
+    content: '';
+    position: absolute;
+}
+
+.quality .img .tri::before{
+    inset: auto auto 0 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--footer1);
+    clip-path: polygon(0 100%,50% 0,100% 100%,77.57970% 100%,50% 44.86194%,22.42029% 100%);
+    -webkit-clip-path: polygon(0 100%,50% 0,100% 100%,77.57970% 100%,50% 44.86194%,22.42029% 100%);
+}
+
+.quality .img .tri::after{
+    inset: auto 0 0;
+    width: 39.93774%;
+    aspect-ratio: 1/.98197;
+    background-color: var(--main);
+    clip-path: polygon(0 100%,50% 0,100% 100%);
+    -webkit-clip-path: polygon(0 100%,50% 0,100% 100%);
+    margin: 0 auto;
+}
+
+.quality .img .iso{
+    position: absolute;
+    inset: auto auto 19.54397% 19.48764%;
+}
+
+.quality .img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -o-object-fit: cover;
+}
+
+.quality .text{
+    width: 453px;
+}
+
+.differentials{
+    position: relative;
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap-reverse;
+    -ms-flex-wrap: wrap-reverse;
+    align-items: stretch;
+}
+
+.differentials::before{
+    content: url("/mirror-assets/de848cc1d8cd709d8a73362c.png");
+    position: absolute;
+    inset: auto 0 -6px auto;
+}
+
+.differentials>*{
+    width: 50%;
+}
+
+.differentials .img,
+.differentials .img img{
+    width: 100%;
+    height: 100%;
+}
+
+.differentials .img{
+    clip-path: polygon(0 0,51.89473% 0,100% 22.94314%,100% 100%,51.89473% 100%,0 77.05685%);
+    -webkit-clip-path: polygon(0 0,51.89473% 0,100% 22.94314%,100% 100%,51.89473% 100%,0 77.05685%);
+}
+
+.differentials .img img{
+    object-fit: cover;
+    -o-object-fit: cover;
+}
+
+.differentials .difs>*{
+    padding: 73px clamp(70px,6.19791vw,119px);
+}
+
+.differentials .difs>*:nth-child(odd){
+    background: url("/mirror-assets/ceaf9f67c00952febe5079ca.png") repeat top left;
+}
+
+.differentials .difs>*:nth-child(even){
+    background: url("/mirror-assets/8f4baeb6daacf013cd8406c9.png") no-repeat bottom center/100% auto;
+}
+
+.differentials .difs>* hr{
+    margin: 1rem 0;
+}
+
+.differentials .difs>*>*{
+    width: 435px;
+}
+
+@media(max-width:1400px){
+    .quality .img .tri{
+        height: auto;
+        aspect-ratio: 1/.98120;
+    }
+}
+
+@media(max-width:992px){
+    .quality{
+        padding: 2rem 0;
+    }
+    .quality .img{
+        position: relative;
+        width: fit-content;
+        height: auto;
+        aspect-ratio: 1/.76609;
+        clip-path: unset;
+        -webkit-clip-path: unset;
+    }
+    .quality .img .tri{
+       width: 38.92045%;
+        height: 49.87144%;
+        aspect-ratio: unset;
+    }
+    .quality .img .iso{
+        inset: 1rem 1rem auto auto;
+        width: 12%;
+    }
+    quality .text{
+        width: 100%;
+    }
+    .differentials::before{
+        display: none;
+        display: -webkit-none;
+    }
+    .differentials>*{
+        width: 100%;
+    }
+    .differentials .difs>*{
+        padding: 2rem 70px;
+    }
+    .differentials .difs>*>*{
+        width: 100%;
+    }
+    .differentials .img{
+        clip-path: unset;
+        -webkit-clip-path: unset;
+    }
+}
+
+@media(max-width:768px){
+    .differentials .difs>*{
+        padding: 2rem 20px;
+    }
+}

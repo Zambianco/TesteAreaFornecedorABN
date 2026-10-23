@@ -1,0 +1,495 @@
+/*
+    Theme Name: Visualy
+    Text Domain: visualy
+    Version: 1.9
+    Tested up to: 5.9
+    Requires at least: 4.7
+    Requires PHP: 5.2.4
+    Description: Tema customizado criado por Visualy Publicidade. Utilização de plugins e funções básicas do Wordpress.
+    Author: Visualy Publicidade
+    Author URI: https://visualy.com.br
+*/
+
+html,
+body {
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+address,
+big,
+cite,
+code,
+em,
+font,
+img,
+small,
+strike,
+sub,
+sup,
+li,
+ol,
+ul,
+fieldset,
+form,
+label,
+legend,
+button,
+table,
+caption,
+tr,
+th,
+td {
+	border: none;
+	font-size: inherit;
+	line-height: inherit;
+	margin: 0;
+	padding: 0;
+	text-align: inherit;
+}
+
+blockquote::before,
+blockquote::after {
+	content: "";
+}
+
+svg,
+img,
+embed,
+object {
+	display: block;
+	height: auto;
+	max-width: 100%;
+}
+
+cite, figcaption, .wp-caption-text, .post-meta, .entry-content .wp-block-archives li, .entry-content .wp-block-categories li, .entry-content .wp-block-latest-posts li, .wp-block-latest-comments__comment-date, .wp-block-latest-posts__post-date, .wp-block-embed figcaption, .wp-block-image figcaption, .wp-block-pullquote cite, .comment-metadata, .comment-respond .comment-notes, .comment-respond .logged-in-as, .pagination .dots, .entry-content hr:not(.has-background), hr.styled-separator, :root .has-secondary-color{
+    color: var(--line);
+}
+
+p{
+    margin-bottom: 0;
+}
+
+button{
+    border: none;
+    border-radius: 0;
+}
+
+input,
+textarea,
+button {
+    line-height: 1;
+}
+
+input,
+textarea {
+    border-color: var(--line);
+    color: var(--black);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text);
+}
+
+code,
+input[type="url"],
+input[type="email"],
+input[type="tel"] {
+    direction: ltr;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="week"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    box-shadow: none;
+    outline: none;
+    -moz-outline: none;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 13px 16px;
+}
+
+input::-webkit-input-placeholder {
+    line-height: normal;
+}
+
+input:-ms-input-placeholder {
+    line-height: normal;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="range"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="time"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="color"]:focus,
+textarea:focus {
+    border-color: var(--main);
+}
+
+input[type="text"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="url"]:focus-visible,
+input[type="password"]:focus-visible,
+input[type="number"]:focus-visible,
+input[type="tel"]:focus-visible,
+input[type="range"]:focus-visible,
+input[type="date"]:focus-visible,
+input[type="month"]:focus-visible,
+input[type="week"]:focus-visible,
+input[type="time"]:focus-visible,
+input[type="datetime"]:focus-visible,
+input[type="datetime-local"]:focus-visible,
+input[type="color"]:focus-visible,
+textarea:focus-visible {
+    outline: none;
+}
+
+input[type="checkbox"] {
+    display: inline;
+    font-weight: 400;
+    margin-left: 0.5rem;
+}
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    margin: 0;
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 0.1rem;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked::before {
+    content: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M14.83%204.89l1.34.94-5.81%208.38H9.02L5.78%209.67l1.34-1.25%202.57%202.4z%27%20fill%3D%27%23000000%27%2F%3E%3C%2Fsvg%3E");
+    position: absolute;
+    display: inline-block;
+    margin: -0.1875rem 0 0 -0.25rem;
+    height: 15px;
+    width: 20px;
+}
+
+.default-page{
+    padding: 2rem 0;
+}
+.default-page .h1,.default-page h1{
+    font-size: 2.5rem !important;
+    line-height: normal !important;
+}
+.default-page .h2,.default-page h2{
+    font-size: 2rem !important;
+    line-height: normal !important;
+}
+.default-page .h3,.default-page h3{
+    font-size: 1.75rem !important;
+    line-height: normal !important;
+}
+.default-page .h4,.default-page h4{
+    font-size: 1.5rem !important;
+    line-height: normal !important;
+}
+.default-page .h5,.default-page h5{
+    font-size: 1.25rem !important;
+    line-height: normal !important;
+}
+.default-page .h6,.default-page h6{
+    font-size: 1rem !important;
+    line-height: normal !important;
+}
+.default-page ul,
+.default-page ol{
+    padding: 0 0 0 1.5rem;
+    margin: 0 0 1.5rem 0;
+}
+.default-page cite{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+}
+.default-page .wp-block-media-text .wp-block-media-text__content{
+    padding: 0 calc(var(--bs-gutter-x) * .5);
+}
+.default-page .wp-block-media-text{
+    grid-gap: 2rem 0;
+}
+.default-page .wp-block-calendar{
+    margin: 2rem 0;
+}
+.default-page .wp-block-calendar th{
+    background-color: var(--main);
+    color: var(--white);
+    font-weight: 600;
+}
+.default-page .wp-block-calendar td{
+    color: var(--black);
+    font-weight: 600;
+}
+.default-page .wp-block-search{
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    grid-gap: 1rem;
+    margin: 2rem 0;
+}
+.default-page .wp-block-search__input{
+    color: var(--black);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+    border-color: var(--line);
+    border-radius: 5px;
+}
+.default-page .wp-block-search__input:focus-visible{
+    outline: none;
+    -moz-outline: none;
+}
+.default-page .wp-block-search__input::placeholder{
+    color: var(--line);
+}
+.default-page .wp-block-columns{
+    padding: 1rem 0;
+}
+.default-page .wp-block-columns>* p{
+    margin-bottom: 0;
+}
+.default-page .has-drop-cap::first-letter{
+    font-weight: 600;
+}
+.default-page summary{
+    margin-bottom: 1rem;
+}
+
+.wpcf7-form {
+    position: relative;
+}
+
+.wpcf7-form .wpcf7-spinner {
+    position: absolute;
+    right: 0;
+    bottom: -30px;
+    margin: 0;
+}
+
+:root{
+    --base: #0A0925;
+    --gray1: #EBEBEB;
+    --gray2: #D6D6D6;
+    --gray3: #C2C2C2;
+    --gray4: #ADADAD;
+    --gray5: #999999;
+    --gray6: #7A7A7A;
+    --gray7: #5C5C5C;
+    --gray8: #3D3D3D;
+    --gray9: #1F1F1F;
+    --default-blue: #0180FF;
+}
+
+[class*=cardModel] .box .img>img{
+    object-fit: cover;
+    -o-object-fit: cover;
+}
+
+[class*=cardModel] .owl-stage-outer {
+    padding: 0 2rem 2rem;
+    margin: 0 -2rem -2rem;
+}
+
+[class*=cardModel] .box {
+    box-shadow: 0px 4px 24px 0px #0000001f;
+    background-color: var(--white);
+}
+
+[class*=cardModel] .box .img {
+    width: 100%;
+}
+
+[class*=cardModel] .box .img>img {
+    width: 100%;
+    height: 100%;
+}
+
+[class*=cardModel] .box .bottom a svg {
+    min-width: fit-content;
+}
+
+*[class*=formModel]{
+    width: 100%;
+    background-color: var(--white);
+    box-shadow: 0px 4px 24px 0px #0000001f;
+}
+
+*[class*=formModel] .ftitle{
+    color: var(--black);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: -0.72px;
+    padding: 19px;
+    border-bottom: 1px solid var(--line);
+}
+
+*[class*=formModel] .row{
+    grid-gap: 1.5rem 0;
+}
+
+*[class*=formModel]:not(:has(.row)) .wpcf7-form-control-wrap{
+    display: block;
+    -webkit-display: block;
+    margin-bottom: 1.5rem;
+}
+
+*[class*=formModel] .lb{
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    margin-bottom: 5px;
+}
+
+*[class*=formModel] .ipts,
+*[class*=formModel] .txta{
+    width: 100%;
+    color: var(--gray5);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    padding: 12px 1rem;
+    background-color: var(--white);
+}
+
+*[class*=formModel] .txta{
+    height: 156px;
+    resize: none;
+    padding: 1rem;
+}
+
+*[class*=formModel] .ipts:focus-visible,
+*[class*=formModel] .txta:focus-visible{
+    outline: none;
+    -moz-outline: none;
+}
+
+*[class*=formModel] .tlb{
+    color: var(--gray5);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+*[class*=formModel] .dbtn{
+    display: flex;
+    -webkit-display: flex;
+    width: 100%;
+    border: none;
+    padding: 12px 1rem;
+    background: var(--gray5);
+}
+
+input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    background-color: transparent !important;
+    border: 2px solid var(--black) !important;
+    border-radius: 2px !important;
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--main) !important;
+    border-color: var(--main) !important;
+}
+
+input[type="checkbox"]:checked::before {
+    filter: invert(1);
+}
+
+.form .termo {
+    display: flex;
+    align-items: start;
+}
+
+.form .wpcf7-list-item.first.last {
+    margin: 0 7.8px 0 0;
+}
+
+.form .wpcf7-list-item-label {
+    display: none;
+}
+
+@media(max-width:992px){
+    .default-page .wp-block-columns,
+    .default-page .wp-block-media-text,
+    .default-page .is-nowrap{
+        flex-wrap: wrap !important;
+        -ms-flex-wrap: wrap !important;
+    }
+    .default-page .wp-block-media-text{
+        display: flex !important;
+        display: -webkit-flex !important;
+        margin: 1rem 0;
+    }
+    .default-page .wp-block-columns>*{
+        width: 100% !important;
+        flex: unset !important;
+    }
+    .default-page .wp-block-buttons{
+        margin: 1rem 0;
+    }
+}
+
+@media(max-width:768px) {
+    [class*=cardModel] .owl-stage-outer {
+        padding: 0 1rem 1rem;
+        margin: 0 -1rem -1rem;
+    }
+    [class*=cardModel] .item {
+        display: flex;
+        justify-content: center;
+        -webkit-justify-content: center;
+    }
+}

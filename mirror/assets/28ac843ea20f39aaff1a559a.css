@@ -1,0 +1,95 @@
+.techservices{
+    position: relative;
+    background: url("/mirror-assets/8f4baeb6daacf013cd8406c9.png") no-repeat bottom center/100% auto;
+    padding: 85px 0 98px;
+}
+
+.techservices .row{
+    grid-gap: 2rem 0;
+}
+
+.techservices hr{
+    margin: 1rem 0 27px;
+}
+
+.techservices .img{
+    position: absolute;
+    inset: 0 0 auto auto;
+    width: 55vw;
+    height: 100%;
+    clip-path: polygon(38.73106% 0,100% 0,100% 100%,0 100%);
+    -webkit-clip-path: polygon(38.73106% 0,100% 0,100% 100%,0 100%);
+}
+
+.techservices .img::before{
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: url("/mirror-assets/8f4baeb6daacf013cd8406c9.png") no-repeat bottom center/100% auto;
+}
+
+.techservices .img .tri{
+    position: absolute;
+    inset: auto auto 0 0;
+    width: 38.92045%;
+    height: 49.87144%;
+}
+
+.techservices .img .tri::before,
+.techservices .img .tri::after{
+    content: '';
+    position: absolute;
+}
+
+.techservices .img .tri::before{
+    inset: auto auto 0 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--footer1);
+    clip-path: polygon(0 100%,50% 0,100% 100%,77.57970% 100%,50% 44.86194%,22.42029% 100%);
+    -webkit-clip-path: polygon(0 100%,50% 0,100% 100%,77.57970% 100%,50% 44.86194%,22.42029% 100%);
+}
+
+.techservices .img .tri::after{
+    inset: auto 0 0;
+    width: 39.93774%;
+    aspect-ratio: 1/.98197;
+    background-color: var(--main);
+    clip-path: polygon(0 100%,50% 0,100% 100%);
+    -webkit-clip-path: polygon(0 100%,50% 0,100% 100%);
+    margin: 0 auto;
+}
+
+.techservices .img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -o-object-fit: cover;
+}
+
+@media(max-width:1400px){
+    .techservices .img .tri{
+        height: auto;
+        aspect-ratio: 1/.98120;
+    }
+}
+
+@media(max-width:992px){
+    .techservices{
+        padding: 2rem 0;
+    }
+    .techservices .img{
+        position: relative;
+        width: fit-content;
+        height: auto;
+        aspect-ratio: 1/.76609;
+        clip-path: unset;
+        -webkit-clip-path: unset;
+    }
+    .techservices .img .tri{
+       width: 38.92045%;
+        height: 49.87144%;
+        aspect-ratio: unset;
+    }
+}
