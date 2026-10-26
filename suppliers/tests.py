@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core import mail
 from django.test import Client, TestCase, override_settings
-from django.utils import timezone
 from .importer import import_evaluations
 from .models import Evaluation, Supplier
 
@@ -46,7 +45,7 @@ class PrivacyTests(TestCase):
     def test_supplier_cannot_import_or_access_admin(self):
         self.client.force_login(self.a)
         self.assertEqual(self.client.get('/fornecedores/importar/').status_code, 302)
-        self.assertEqual(self.client.post('/fornecedores/importar/', {'file': SimpleUploadedFile('a.csv', b'cnpj,razaosocial,nota\n11444777000161,Fornecedor B,99')}).status_code, 302)
+        self.assertEqual(self.client.post('/fornecedores/importar/', {'file': SimpleUploadedFile('a.csv', b'cnpj,razaosocial,email,exercicio,nota\n11444777000161,Fornecedor B,b@example.com,2025,99')}).status_code, 302)
         self.assertEqual(self.client.get('/admin/').status_code, 302)
         self.assertEqual(Evaluation.objects.get(supplier=self.sb).score, 'B')
 
@@ -72,41 +71,71 @@ class PrivacyTests(TestCase):
 
     def test_import_is_atomic(self):
         with self.assertRaises(ValueError):
-            import_evaluations(b'cnpj,razaosocial,nota\n11222333000181,Fornecedor A,C\n99999999999999,Invalido,D')
+            import_evaluations(
+                b'cnpj,razaosocial,email,exercicio,nota\n'
+                b'11222333000181,Fornecedor A,a@example.com,2025,C\n'
+                b'99999999999999,Invalido,invalido@example.com,2025,D'
+            )
         self.assertEqual(Evaluation.objects.get(supplier=self.sa).score, 'A')
 
-    def test_import_updates_and_accepts_bom_semicolon(self):
-        data = '\ufeffcnpj;razaosocial;nota\n11.222.333/0001-81;Fornecedor atualizado;c'.encode('utf-8')
-        summary = import_evaluations(data, year=2025)
+    def test_import_updates_supplier_email_and_accepts_bom_semicolon(self):
+        data = ('\ufeffcnpj;razaosocial;email;exercicio;nota\n'
+                '11.222.333/0001-81;Fornecedor atualizado;novo@example.com;2025;c').encode('utf-8')
+        summary = import_evaluations(data)
         self.assertEqual(summary.evaluations, 1)
         self.assertEqual(Evaluation.objects.get(supplier=self.sa, year=2025).score, 'C')
         self.sa.refresh_from_db()
+        self.a.refresh_from_db()
         self.assertEqual(self.sa.name, 'Fornecedor atualizado')
+        self.assertEqual(self.sa.email, 'novo@example.com')
+        self.assertEqual(self.a.email, 'novo@example.com')
 
     def test_import_rejects_duplicates_and_oversized_scores(self):
-        for rows in [f'11222333000181,Fornecedor A,{"A" * 51}',
-                     '11222333000181,Fornecedor A,A\n11222333000181,Fornecedor A,B']:
+        for rows in [f'11222333000181,Fornecedor A,a@example.com,2025,{"A" * 51}',
+                     ('11222333000181,Fornecedor A,a@example.com,2025,A\n'
+                      '11222333000181,Fornecedor A,a@example.com,2025,B')]:
             with self.subTest(rows=rows), self.assertRaises(ValueError):
-                import_evaluations(('cnpj,razaosocial,nota\n' + rows).encode())
+                import_evaluations(('cnpj,razaosocial,email,exercicio,nota\n' + rows).encode())
 
-    def test_import_creates_supplier_and_accepts_division_error_as_null(self):
-        summary = import_evaluations(b'cnpj,razaosocial,nota\n04252011000110,Novo Fornecedor,#DIV/0!')
+    def test_import_accepts_same_supplier_for_different_years(self):
+        data = (b'cnpj,razaosocial,email,exercicio,nota\n'
+                b'11222333000181,Fornecedor A,a@example.com,2024,B\n'
+                b'11222333000181,Fornecedor A,a@example.com,2025,A')
+        summary = import_evaluations(data)
+        self.assertEqual(summary.evaluations, 2)
+        self.assertEqual(Evaluation.objects.get(supplier=self.sa, year=2024).score, 'B')
+        self.assertEqual(Evaluation.objects.get(supplier=self.sa, year=2025).score, 'A')
+
+    def test_import_creates_supplier_with_email_and_accepts_division_error_as_null(self):
+        summary = import_evaluations(
+            b'cnpj,razaosocial,email,exercicio,nota\n'
+            b'04252011000110,Novo Fornecedor,novo@example.com,2024,#DIV/0!'
+        )
         supplier = Supplier.objects.get(cnpj='04252011000110')
         self.assertEqual(summary.suppliers_created, 1)
         self.assertTrue(supplier.user.check_password('abn@2026'))
         self.assertFalse(supplier.must_change_password)
-        self.assertIsNone(Evaluation.objects.get(supplier=supplier, year=timezone.localdate().year).score)
+        self.assertEqual(supplier.email, 'novo@example.com')
+        self.assertEqual(supplier.user.email, 'novo@example.com')
+        self.assertIsNone(Evaluation.objects.get(supplier=supplier, year=2024).score)
 
     def test_import_rejects_invalid_cnpj_check_digits(self):
         with self.assertRaisesRegex(ValueError, 'Linha 2: o CNPJ 11222333000182 possui dígitos verificadores inválidos'):
-            import_evaluations(b'cnpj,razaosocial,nota\n11222333000182,Fornecedor,10')
+            import_evaluations(
+                b'cnpj,razaosocial,email,exercicio,nota\n'
+                b'11222333000182,Fornecedor,contato@example.com,2025,10'
+            )
 
     def test_import_reports_the_exact_invalid_field(self):
+        header = 'cnpj,razaosocial,email,exercicio,nota\n'
         cases = [
-            (b'cnpj,razaosocial,nota\n,Fornecedor,A', 'o CNPJ está vazio'),
-            (b'cnpj,razaosocial,nota\n11222333000181,,A', 'a razão social está vazia'),
-            (b'cnpj,razaosocial,nota\n11222333000181,Fornecedor', 'faltam valores para: nota'),
-            (('cnpj,razaosocial,nota\n11222333000181,Fornecedor,' + 'A' * 51).encode(),
+            ((header + ',Fornecedor,contato@example.com,2025,A').encode(), 'o CNPJ está vazio'),
+            ((header + '11222333000181,,contato@example.com,2025,A').encode(), 'a razão social está vazia'),
+            ((header + '11222333000181,Fornecedor,email-invalido,2025,A').encode(), 'o e-mail'),
+            ((header + '11222333000181,Fornecedor,contato@example.com,ano,A').encode(), 'o exercício'),
+            ((header + '11222333000181,Fornecedor,contato@example.com,2025').encode(),
+             'faltam valores para: nota'),
+            ((header + '11222333000181,Fornecedor,contato@example.com,2025,' + 'A' * 51).encode(),
              'a nota excede o limite de 50 caracteres'),
         ]
         for data, message in cases:
@@ -116,9 +145,12 @@ class PrivacyTests(TestCase):
     def test_superuser_can_upload(self):
         admin = User.objects.create_superuser('admin', password='Administrator-pass-93!')
         self.client.force_login(admin)
-        file = SimpleUploadedFile('scores.csv', b'cnpj,razaosocial,nota\n11222333000181,Fornecedor A,A')
+        file = SimpleUploadedFile(
+            'scores.csv',
+            b'cnpj,razaosocial,email,exercicio,nota\n11222333000181,Fornecedor A,a@example.com,2025,A',
+        )
         self.assertEqual(self.client.post('/fornecedores/importar/', {'file': file}).status_code, 302)
-        self.assertTrue(Evaluation.objects.filter(supplier=self.sa, year=timezone.localdate().year, score='A').exists())
+        self.assertTrue(Evaluation.objects.filter(supplier=self.sa, year=2025, score='A').exists())
 
     def test_admin_import_page_and_example_download(self):
         admin = User.objects.create_superuser('admin2', password='Administrator-pass-93!')
@@ -127,7 +159,7 @@ class PrivacyTests(TestCase):
         response = self.client.get('/admin/suppliers/evaluation/exemplo.csv')
         self.assertEqual(response.status_code, 200)
         self.assertIn('attachment', response['Content-Disposition'])
-        self.assertIn(b'cnpj,razaosocial,nota', response.content)
+        self.assertIn(b'cnpj,razaosocial,email,exercicio,nota', response.content)
 
     @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
     def test_admin_reset_creates_test_password_without_forced_change(self):

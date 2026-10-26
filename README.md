@@ -42,11 +42,11 @@ Na lista de fornecedores do admin, use **Criar senha temporária** ou **Resetar 
 
 ## Importar notas
 
-O administrador envia os resultados em `/admin/suppliers/evaluation/importar/`, acessível em **Avaliações → Importar CSV**. A página também oferece o download do arquivo de exemplo. Envie CSV UTF-8 (BOM opcional), separado por vírgula ou ponto e vírgula, com cabeçalho `cnpj,razaosocial,nota`. `exemplo-avaliacoes.csv` demonstra o formato. O exercício é o ano atual. A nota é um texto, como `A`, `B` ou `C`.
+O administrador envia os resultados em `/admin/suppliers/evaluation/importar/`, acessível em **Avaliações → Importar CSV**. A página também oferece o download do arquivo de exemplo. Envie CSV UTF-8 (BOM opcional), separado por vírgula ou ponto e vírgula, com cabeçalho `cnpj,razaosocial,email,exercicio,nota`. `exemplo-avaliacoes.csv` demonstra o formato. O exercício é informado em cada linha com quatro dígitos, e o e-mail é usado na recuperação de senha. A nota é um texto, como `A`, `B` ou `C`.
 
-O CNPJ é validado pelos dígitos verificadores. Quando ele ainda não existe, o fornecedor e seu usuário são criados automaticamente com a senha de testes `abn@2026`, sem troca obrigatória no primeiro acesso. O CNPJ identifica o fornecedor e uma nova importação pode atualizar sua razão social. Nota vazia ou contendo erro `DIV/0` é armazenada como “Sem nota”.
+O CNPJ é validado pelos dígitos verificadores. Quando ele ainda não existe, o fornecedor e seu usuário são criados automaticamente com a senha de testes `abn@2026`, sem troca obrigatória no primeiro acesso. O CNPJ identifica o fornecedor e uma nova importação pode atualizar sua razão social e seu e-mail de recuperação. Nota vazia ou contendo erro `DIV/0` é armazenada como “Sem nota”.
 
-A importação aceita até 2 MB / 10.000 linhas, rejeita duplicidades no arquivo e desfaz todas as alterações se qualquer linha for inválida. Reimportar o mesmo CNPJ e exercício atualiza a nota existente.
+A importação aceita até 2 MB / 10.000 linhas, rejeita combinações duplicadas de CNPJ e exercício e desfaz todas as alterações se qualquer linha for inválida. Reimportar o mesmo CNPJ e exercício atualiza a nota existente. O mesmo CNPJ pode aparecer em exercícios diferentes no mesmo arquivo.
 
 Todas as consultas do portal filtram pelo usuário da sessão no servidor. Não há listagem, busca ou rota pública de outros fornecedores. Parâmetros de CNPJ/ID enviados pelo navegador não alteram esse filtro. Respostas de avaliações não podem ser armazenadas em cache. Somente administradores autorizados devem receber acesso de equipe/superusuário.
 

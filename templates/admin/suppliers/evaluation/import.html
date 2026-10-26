@@ -1,7 +1,8 @@
 {% extends "admin/base_site.html" %}
 {% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Início</a> › <a href="{% url 'admin:suppliers_evaluation_changelist' %}">Avaliações</a> › Importar CSV</div>{% endblock %}
 {% block content %}
-<p>Envie um CSV UTF-8 com as colunas <code>cnpj,razaosocial,nota</code>. O exercício usado será o ano atual.</p>
+<p>Envie um CSV UTF-8 com as colunas <code>cnpj,razaosocial,email,exercicio,nota</code>.</p>
+<p>O e-mail será usado para recuperação de senha. Informe o exercício com quatro dígitos, por exemplo <code>2026</code>.</p>
 <p>Fornecedores novos serão cadastrados pelo CNPJ com a senha de testes definida para o projeto.</p>
 <p>A nota é textual, por exemplo <code>A</code>, <code>B</code> ou <code>C</code>. Notas vazias ou com erro <code>#DIV/0!</code> serão gravadas como “Sem nota”.</p>
 <p><a class="button" href="{% url 'admin:suppliers_evaluation_example' %}">Baixar CSV de exemplo</a></p>

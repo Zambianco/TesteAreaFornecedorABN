@@ -4,8 +4,8 @@ import re
 from dataclasses import dataclass
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db import transaction
-from django.utils import timezone
 from .models import Evaluation, Supplier, validate_cnpj
 
 
@@ -22,6 +22,29 @@ def parse_score(value):
     if len(normalized) > 50:
         raise ValueError('a nota excede o limite de 50 caracteres.')
     return normalized
+
+
+def parse_email(value):
+    email = value.strip().lower()
+    if not email:
+        raise ValueError('o e-mail está vazio.')
+    try:
+        validate_email(email)
+    except ValidationError:
+        raise ValueError(f'o e-mail "{value.strip()}" é inválido.')
+    return email
+
+
+def parse_year(value):
+    raw = value.strip()
+    if not raw:
+        raise ValueError('o exercício está vazio.')
+    if len(raw) != 4 or not raw.isdigit():
+        raise ValueError(f'o exercício "{raw}" deve ser um ano com quatro dígitos.')
+    year = int(raw)
+    if year < 1900 or year > 9999:
+        raise ValueError('o exercício deve estar entre 1900 e 9999.')
+    return year
 
 
 def parse_cnpj(value):
@@ -41,7 +64,7 @@ def parse_cnpj(value):
 
 
 @transaction.atomic
-def import_evaluations(data, year=None):
+def import_evaluations(data):
     try:
         text = data.decode('utf-8-sig')
     except UnicodeDecodeError:
@@ -49,9 +72,9 @@ def import_evaluations(data, year=None):
     reader = csv.DictReader(io.StringIO(text), delimiter=';' if ';' in text.split('\n')[0] else ',')
     if reader.fieldnames:
         reader.fieldnames = [field.strip().lower() for field in reader.fieldnames]
-    if reader.fieldnames != ['cnpj', 'razaosocial', 'nota']:
-        raise ValueError('O cabeçalho deve ser cnpj,razaosocial,nota (nesta ordem).')
-    year = year or timezone.localdate().year
+    expected_fields = ['cnpj', 'razaosocial', 'email', 'exercicio', 'nota']
+    if reader.fieldnames != expected_fields:
+        raise ValueError('O cabeçalho deve ser cnpj,razaosocial,email,exercicio,nota (nesta ordem).')
     seen = set()
     count = 0
     suppliers_created = 0
@@ -71,25 +94,38 @@ def import_evaluations(data, year=None):
                 raise ValueError('a razão social está vazia.')
             if len(name) > 200:
                 raise ValueError('a razão social excede o limite de 200 caracteres.')
+            email = parse_email(row['email'])
+            year = parse_year(row['exercicio'])
             score = parse_score(row['nota'])
         except ValueError as error:
             raise ValueError(f'Linha {line}: {error}')
-        if cnpj in seen:
-            raise ValueError(f'Linha {line}: CNPJ duplicado no arquivo.')
-        seen.add(cnpj)
+        evaluation_key = (cnpj, year)
+        if evaluation_key in seen:
+            raise ValueError(f'Linha {line}: CNPJ e exercício duplicados no arquivo.')
+        seen.add(evaluation_key)
+        if Supplier.objects.exclude(cnpj=cnpj).filter(email__iexact=email).exists():
+            raise ValueError(f'Linha {line}: o e-mail {email} já pertence a outro fornecedor.')
         supplier = Supplier.objects.filter(cnpj=cnpj).first()
         if supplier is None:
             user, _ = User.objects.get_or_create(username=cnpj)
+            user.email = email
             user.set_password('abn@2026')
-            user.save(update_fields=['password'])
-            supplier = Supplier(user=user, name=name, cnpj=cnpj, email=user.email or None)
+            user.save(update_fields=['email', 'password'])
+            supplier = Supplier(user=user, name=name, cnpj=cnpj, email=email)
             supplier.full_clean()
             supplier.must_change_password = False
             supplier.save()
             suppliers_created += 1
-        elif supplier.name != name:
-            supplier.name = name
-            supplier.save(update_fields=['name'])
+        else:
+            changed_fields = []
+            if supplier.name != name:
+                supplier.name = name
+                changed_fields.append('name')
+            if supplier.email != email:
+                supplier.email = email
+                changed_fields.append('email')
+            if changed_fields:
+                supplier.save(update_fields=changed_fields)
         Evaluation.objects.update_or_create(supplier=supplier, year=year, defaults={'score': score})
         count += 1
     if not count:

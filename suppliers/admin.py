@@ -102,7 +102,8 @@ class EvaluationAdmin(admin.ModelAdmin):
         return render(request, 'admin/suppliers/evaluation/import.html', context)
 
     def example_csv(self, request):
-        content = '\ufeffcnpj,razaosocial,nota\r\n11222333000181,Fornecedor Exemplo,A\r\n'
+        content = ('\ufeffcnpj,razaosocial,email,exercicio,nota\r\n'
+                   '11222333000181,Fornecedor Exemplo,contato@fornecedor.com.br,2026,A\r\n')
         response = HttpResponse(content, content_type='text/csv; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename="exemplo-avaliacoes.csv"'
         return response
